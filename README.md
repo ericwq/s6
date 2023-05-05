@@ -7,3 +7,4 @@ docker image based on s6.
 - [Quickstart and FAQ for s6-linux-init](http://skarnet.org/software/s6-linux-init/quickstart.html)
 - [An overview of s6](https://skarnet.org/software/s6/overview.html)
 - [s6 overlay](https://github.com/just-containers/s6-overlay)
+- [S6 Made Easy, with the S6 Overlay](https://tutumcloud.wordpress.com/2015/05/20/s6-made-easy-with-the-s6-overlay/)
