@@ -8,19 +8,28 @@ ARG USER_PWD=supervision
 ARG SSH_PUB_KEY
 ARG HOME=/home/ide
 ARG S6_OVERLAY_VERSION=3.1.5.0
+ENV TZ=Asia/Shanghai
 
 # Create user/group 
 # ide/develop
 #
 RUN addgroup develop && adduser -D -h $HOME -s /bin/ash -G develop ide
 
-RUN apk add --no-cache --update bash openssh tzdata sudo tar gzip \
+RUN apk add --no-cache --update bash openssh tzdata sudo tar xz curl htop \
 	&& sed -i s/#PermitRootLogin.*/PermitRootLogin\ yes/ /etc/ssh/sshd_config \
 	&& sed -ie 's/#Port 22/Port 22/g' /etc/ssh/sshd_config \
 	&& echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel \
 	&& ssh-keygen -A \
 	&& adduser ide wheel \
 	&& rm -rf /var/cache/apk/*
+
+# extract s6-overlay
+#
+ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp/s6/
+RUN tar xf /tmp/s6/s6-overlay-noarch.tar.xz -C /
+ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-x86_64.tar.xz /tmp/s6/
+RUN tar xf /tmp/s6/s6-overlay-x86_64.tar.xz -C /
+RUN rm -rf /tmp/s6
 
 # enable root login, for debug dockerfile purpose.
 # set root password
@@ -33,18 +42,14 @@ RUN mkdir -p /root/.ssh \
 	&& echo "$SSH_PUB_KEY" > /root/.ssh/authorized_keys
 
 # prepare the scan directory
-ADD ./etc /etc
-RUN mkdir -p /etc/s6/sshd \
-	&& ln -s /etc/init.d/sshd /etc/s6/sshd/run \
-	&& ln -s /bin/true /etc/s6/sshd/finish
+# ADD ./etc /etc
+# RUN mkdir -p /etc/s6/sshd \
+# 	&& ln -s /etc/init.d/sshd /etc/s6/sshd/run \
+# 	&& ln -s /bin/true /etc/s6/sshd/finish
 
 # change the ssh hello message
 #
 COPY ./conf/motd 		/etc/motd
-
-RUN ls -al /etc/s6/
-RUN ls -al /etc/s6/sshd
-RUN ls -al /etc/s6/.s6-svscan
 
 USER ide:develop
 WORKDIR $HOME
@@ -55,15 +60,18 @@ WORKDIR $HOME
 RUN mkdir -p $HOME/.ssh \
 	&& chmod 0700 $HOME/.ssh \
 	&& echo "$SSH_PUB_KEY" > $HOME/.ssh/authorized_keys
+
+# Set the environment
+# TZ environment does not working for s6, so we use the .profile instead.
+#
+COPY --chown=ide:develop ./conf/profile		$HOME/.profile
+
 USER root
 
 EXPOSE 22
 
 CMD ["/usr/sbin/sshd", "-D"]
 
-# Adding `s6-svscan` as our entrypoint guarantees that
-# we'll have it running as our PID-1 processes.
+# start s6-overlay
 #
-# /etc/s6 indicates the "scan directory", that is,
-# where our services live.
-ENTRYPOINT [ "/bin/s6-svscan", "/etc/s6" ]
+ENTRYPOINT ["/init"]
