@@ -7,13 +7,14 @@ ARG ROOT_PWD=s6_init_root
 ARG USER_PWD=supervision
 ARG SSH_PUB_KEY
 ARG HOME=/home/ide
+ARG S6_OVERLAY_VERSION=3.1.5.0
 
 # Create user/group 
 # ide/develop
 #
 RUN addgroup develop && adduser -D -h $HOME -s /bin/ash -G develop ide
 
-RUN apk add --no-cache --update s6 bash openssh tzdata sudo \
+RUN apk add --no-cache --update bash openssh tzdata sudo tar gzip \
 	&& sed -i s/#PermitRootLogin.*/PermitRootLogin\ yes/ /etc/ssh/sshd_config \
 	&& sed -ie 's/#Port 22/Port 22/g' /etc/ssh/sshd_config \
 	&& echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel \
@@ -57,6 +58,8 @@ RUN mkdir -p $HOME/.ssh \
 USER root
 
 EXPOSE 22
+
+CMD ["/usr/sbin/sshd", "-D"]
 
 # Adding `s6-svscan` as our entrypoint guarantees that
 # we'll have it running as our PID-1 processes.
