@@ -7,8 +7,14 @@ ARG ROOT_PWD=s6_init_root
 ARG USER_PWD=supervision
 ARG SSH_PUB_KEY
 ARG HOME=/home/ide
+
+# S6 overlay version
+#
 ARG S6_OVERLAY_VERSION=3.1.5.0
-ENV TZ=Asia/Shanghai
+
+# for s6, the default environment is blank, so the following ENV has no effect
+#
+#ENV TZ=Asia/Shanghai
 
 # Create user/group 
 # ide/develop
@@ -55,14 +61,14 @@ USER ide:develop
 WORKDIR $HOME
 
 # setup ssh for user ide
-# setup ide public key login
+# setup public key login for normal user
 #
 RUN mkdir -p $HOME/.ssh \
 	&& chmod 0700 $HOME/.ssh \
 	&& echo "$SSH_PUB_KEY" > $HOME/.ssh/authorized_keys
 
-# Set the environment
-# TZ environment does not working for s6, so we use the .profile instead.
+# Set the environment for normal user: including TZ
+# for s6, the default environment is blank, so we use the .profile instead.
 #
 COPY --chown=ide:develop ./conf/profile		$HOME/.profile
 
