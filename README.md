@@ -1,4 +1,4 @@
-# s6
+## s6
 docker image based on s6.
 
 - [s6-example](https://github.com/beldpro-ci/s6-entrypoint)
@@ -8,3 +8,17 @@ docker image based on s6.
 - [An overview of s6](https://skarnet.org/software/s6/overview.html)
 - [s6 overlay](https://github.com/just-containers/s6-overlay)
 - [S6 Made Easy, with the S6 Overlay](https://tutumcloud.wordpress.com/2015/05/20/s6-made-easy-with-the-s6-overlay/)
+
+## why S6-rc
+
+- heavyweight daemons could consume cpu, mem, disk resources and increase the total booting time significantly.
+- start/stop order matters, handle oneshot and longrun daemon interleave.
+- daemons need dependency management.
+
+## Traditional, sequential starters
+
+## Monolithic Init
+
+- Upstart: used ptrace on the processes it spawned in order to keep track of their forks.
+- launched: uses XML for daemon configuration, has to link in a XML parsing library.
+- systemd: up by an order of magnitude, doesn't even get readiness notification right.
