@@ -48,11 +48,15 @@ RUN mkdir -p /root/.ssh \
 	&& echo "$SSH_PUB_KEY" > /root/.ssh/authorized_keys
 
 # prepare the s6-rc source definition directory
-ADD ./etc/s6-rc/* /run/s6-rc/servicedirs/
+#
+COPY ./etc/s6-rc.d/ /etc/s6-overlay/s6-rc.d/
+RUN cd /etc/s6-overlay/s6-rc.d/user/contents.d/ \
+	&& touch utmps-prepare wtmpd utmpd
 
-# RUN mkdir -p /etc/s6/sshd \
-# 	&& ln -s /etc/init.d/sshd /etc/s6/sshd/run \
-# 	&& ln -s /bin/true /etc/s6/sshd/finish
+# prepare s6 service directory
+#
+# COPY ./etc/s6/ /etc/services.d/
+# RUN du -a /etc/services.d
 
 # change the ssh hello message
 #

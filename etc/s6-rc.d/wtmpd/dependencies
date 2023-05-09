@@ -3,4 +3,4 @@
 # once /var/log has been mounted.
 
 utmps-prepare
-mount-var-log
+# mount-var-log
