@@ -21,7 +21,7 @@ ARG S6_OVERLAY_VERSION=3.1.5.0
 #
 RUN addgroup develop && adduser -D -h $HOME -s /bin/ash -G develop ide
 
-RUN apk add --no-cache --update bash openssh tzdata sudo tar xz curl htop \
+RUN apk add --no-cache --update openssh tzdata sudo tar xz htop utmps\
 	&& sed -i s/#PermitRootLogin.*/PermitRootLogin\ yes/ /etc/ssh/sshd_config \
 	&& sed -ie 's/#Port 22/Port 22/g' /etc/ssh/sshd_config \
 	&& echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel \
@@ -47,8 +47,9 @@ RUN mkdir -p /root/.ssh \
 	&& echo "ide:${USER_PWD}" | chpasswd \
 	&& echo "$SSH_PUB_KEY" > /root/.ssh/authorized_keys
 
-# prepare the scan directory
-# ADD ./etc /etc
+# prepare the s6-rc source definition directory
+ADD ./etc/s6-rc/* /run/s6-rc/servicedirs/
+
 # RUN mkdir -p /etc/s6/sshd \
 # 	&& ln -s /etc/init.d/sshd /etc/s6/sshd/run \
 # 	&& ln -s /bin/true /etc/s6/sshd/finish
