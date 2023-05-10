@@ -1,6 +1,10 @@
 # s6-overlay
 A practical docker image based on [s6-overlay](https://github.com/just-containers/s6-overlay), [ssh](https://www.openssh.com/), [utmps](https://git.skarnet.org/cgi-bin/cgit.cgi/utmps/about/).
 
+## usage
+
+check the `build.md` for how to build image and run container.
+
 ## the relationship between s6 and s6-overlay
 
 `s6` is the base, it is best used in virtual machine instead of docker container. `s6-overlay` is the `s6` wrapper for docker container.
