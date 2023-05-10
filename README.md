@@ -3,11 +3,11 @@ A practical docker image based on [s6-overlay](https://github.com/just-container
 
 ## the relationship between s6 and s6-overlay
 
-s6 is the base, it is best used in virtual machine instead of docker container. s6-overlay is the s6 wrapper for docker container.
+`s6` is the base, it is best used in virtual machine instead of docker container. `s6-overlay` is the `s6` wrapper for docker container.
 
 ## installation: package vs tar ball
 
-alpine and other linux distribution support s6 related package. for example, on alpine there are full set of s6 package available.
+Alpine and other linux distribution support `s6` related package. For example, on alpine there are full set of `s6` package available.
 
 ```sh
 # apk search s6
@@ -47,7 +47,7 @@ s6-rc-dev-0.5.4.1-r1
 s6-linux-init-dev-1.1.1.1-r0
 s6-networking-doc-2.5.1.3-r1
 ```
-while the origianl s6-overlay site suggest `tar.xz` installation. such as:
+while the origianl `s6-overlay` site suggest `tar.xz` installation. such as:
 
 ```dockerfile
 # extract s6-overlay
@@ -61,7 +61,7 @@ RUN rm -rf /tmp/s6
 
 ## sshd problem
 
-s6-overlay support running sshd as supervised process in the follwoing way. In this way, the container will execute `ENTRYPOINT` first, then the system will execute `CMD` part.
+`s6-overlay` support running `sshd` as supervised process in the follwoing way. In this way, the container will execute `ENTRYPOINT` first, then the system will execute `CMD` part.
 
 ```dockerfile
 CMD ["/usr/sbin/sshd", "-D"]
@@ -73,7 +73,7 @@ ENTRYPOINT ["/init"]
 
 ## PATH problem
 
-With the tar ball installation, the s6-overlay is installed under `/command` and `/package` directory. utmps give an example `s6-rc` configuration. You need to change shebangs line to respect the above installation.
+With the tar ball installation, the `s6-overlay` is installed under `/command` and `/package` directory. utmps give an example `s6-rc` configuration. You need to change shebangs line to respect the above installation.
 
 the origianl content of `utmpd/run` script:
 
@@ -87,7 +87,7 @@ fdmove 1 3
 s6-ipcserver -1 -- /run/utmps/utmpd-socket
 utmps-utmpd
 ```
-the modified content of `utmpd\run` script, keep your eye on the first shebangs line.
+the modified content of `utmpd/run` script, keep your eye on the first shebangs line. Without the modification, your run script is not executeable.
 
 ```sh
 #!/command/execlineb -P
