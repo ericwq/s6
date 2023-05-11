@@ -21,7 +21,7 @@ ARG S6_OVERLAY_VERSION=3.1.5.0
 #
 RUN addgroup develop && adduser -D -h $HOME -s /bin/ash -G develop ide
 
-RUN apk add --no-cache --update openssh-server tzdata sudo tar xz htop utmps fzf ripgrep \
+RUN apk add --no-cache --update openssh-server tzdata sudo tar xz htop utmps fzf ripgrep s6-overlay \
 	&& sed -i s/#PermitRootLogin.*/PermitRootLogin\ yes/ /etc/ssh/sshd_config \
 	&& sed -ie 's/#Port 22/Port 22/g' /etc/ssh/sshd_config \
 	&& echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel \
@@ -29,13 +29,13 @@ RUN apk add --no-cache --update openssh-server tzdata sudo tar xz htop utmps fzf
 	&& adduser ide wheel \
 	&& rm -rf /var/cache/apk/*
 
-# extract s6-overlay
+# extract s6-overlay tarball, disable it because we have the s6-overlay package.
 #
-ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp/s6/
-RUN tar xf /tmp/s6/s6-overlay-noarch.tar.xz -C /
-ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-x86_64.tar.xz /tmp/s6/
-RUN tar xf /tmp/s6/s6-overlay-x86_64.tar.xz -C /
-RUN rm -rf /tmp/s6
+# ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp/s6/
+# RUN tar xf /tmp/s6/s6-overlay-noarch.tar.xz -C /
+# ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-x86_64.tar.xz /tmp/s6/
+# RUN tar xf /tmp/s6/s6-overlay-x86_64.tar.xz -C /
+# RUN rm -rf /tmp/s6
 
 # enable root login, for debug dockerfile purpose.
 # set root password
