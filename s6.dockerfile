@@ -21,7 +21,7 @@ ARG S6_OVERLAY_VERSION=3.1.5.0
 #
 RUN addgroup develop && adduser -D -h $HOME -s /bin/ash -G develop ide
 
-RUN apk add --no-cache --update openssh tzdata sudo tar xz htop utmps fzf ripgrep \
+RUN apk add --no-cache --update openssh-server tzdata sudo tar xz htop utmps fzf ripgrep \
 	&& sed -i s/#PermitRootLogin.*/PermitRootLogin\ yes/ /etc/ssh/sshd_config \
 	&& sed -ie 's/#Port 22/Port 22/g' /etc/ssh/sshd_config \
 	&& echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel \
@@ -51,7 +51,7 @@ RUN mkdir -p /root/.ssh \
 #
 COPY ./etc/s6-rc.d/ /etc/s6-overlay/s6-rc.d/
 RUN cd /etc/s6-overlay/s6-rc.d/user/contents.d/ \
-	&& touch utmps-prepare wtmpd utmpd
+	&& touch utmps-prepare wtmpd utmpd syslogd
 
 # prepare s6 service directory
 #

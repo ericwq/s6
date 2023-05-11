@@ -112,3 +112,4 @@ utmps-utmpd
 - [An overview of s6](https://skarnet.org/software/s6/overview.html)
 - [s6 overlay](https://github.com/just-containers/s6-overlay)
 - [S6 Made Easy, with the S6 Overlay](https://tutumcloud.wordpress.com/2015/05/20/s6-made-easy-with-the-s6-overlay/)
+- [How to understand S6 Overlay v3](https://darkghosthunter.medium.com/how-to-understand-s6-overlay-v3-95c81c04f075)

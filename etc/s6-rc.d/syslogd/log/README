@@ -1,0 +1,5 @@
+ This logger service logs everything the syslogd service receives
+into subdirectories of /var/log/syslogd logdir.
+
+ It emulates the default syslogd behaviour on a majority of Linux
+distributions.

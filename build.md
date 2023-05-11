@@ -13,6 +13,8 @@
   --mount source=proj-vol,target=/home/ide/proj \
   --mount type=bind,source=/Users/qiwang/dev,target=/home/ide/develop \
   s6-ssh:0.1.0 /bin/ash
+
+% docker run -ti --rm -h s6-ssh --name s6-ssh s6-ssh:0.1.0 /bin/ash
 ```
 
 ## run image in background
