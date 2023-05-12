@@ -41,16 +41,17 @@
 # CMD ["/sbin/init"]
 
 # https://github.com/robertdebock/docker-alpine-openrc/blob/master/dockerfiles
+# https://github.com/dockage/alpine/blob/main/3.17/Dockerfile #TODO
 #
 FROM alpine:edge
 
-LABEL maintainer="Robert de Bock <robert@meinit.nl>"
-LABEL build_date="2022-05-18"
+LABEL maintainer="ericwq057@qq.com"
+LABEL build_date="2023-05-12"
 
 ENV container=docker
 
 # Enable init.
-RUN apk add --update --no-cache openrc && \
+RUN apk add --update --no-cache openssh-server openrc utmps fzf ripgrep htop && \
     sed -i 's/^\(tty\d\:\:\)/#\1/g' /etc/inittab && \
     sed -i \
       -e 's/#rc_sys=".*"/rc_sys="docker"/g' \
@@ -66,8 +67,20 @@ RUN apk add --update --no-cache openrc && \
       /etc/init.d/modules-load \
       /etc/init.d/modloop && \
     sed -i 's/cgroup_add_service /# cgroup_add_service /g' /lib/rc/sh/openrc-run.sh && \
-    sed -i 's/VSERVER/DOCKER/Ig' /lib/rc/sh/init.sh
+    sed -i 's/VSERVER/DOCKER/Ig' /lib/rc/sh/init.sh && \
+	 sed -ie "s/#PubkeyAuthentication/PubkeyAuthentication/g" /etc/ssh/sshd_config && \
+	 sed -ie "s/#PasswordAuthentication yes/PasswordAuthentication no/g" /etc/ssh/sshd_config
+
+# enable sshd
+RUN rc-update add sshd default
+
+# setup utmp
+# RUN setup-utmp
 
 VOLUME ["/sys/fs/cgroup"]
 
-CMD ["/sbin/init"]
+EXPOSE 22
+
+# start open-rc
+#
+ENTRYPOINT ["/sbin/init"]

@@ -19,7 +19,8 @@
 % docker run -ti --rm -h s6-ssh --name s6-ssh s6-ssh:0.1.0 /bin/ash
 % docker run -ti --rm -h openrc-ssh --name openrc-ssh openrc-ssh:0.1.0 /bin/ash
 
-% docker run --tty --privileged --volume /sys/fs/cgroup:/sys/fs/cgroup:ro openrc-ssh:0.1.0 /bin/ash
+% docker run --tty --privileged --volume /sys/fs/cgroup:/sys/fs/cgroup:ro \
+    -h openrc --name openrc -d -p 22:22 openrc-ssh:0.1.0
 ```
 
 ## run image in background
@@ -37,4 +38,6 @@
 % ssh root@localhost
 % docker exec -u root -it s6-ssh ash
 % docker exec -u ide -it s6-ssh ash
+
+% docker exec -u root -it openrc ash
 ```
