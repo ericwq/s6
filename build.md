@@ -19,7 +19,6 @@
 
 ## run image in background
 ```sh
-% docker run -ti --rm -p 22:22 -h s6-ssh --name s6-ssh \
 % docker run -d -p 22:22 -h s6-ssh --name s6-ssh \
   --mount source=proj-vol,target=/home/ide/proj \
   --mount type=bind,source=/Users/qiwang/dev,target=/home/ide/develop \
