@@ -5,6 +5,8 @@
 	--build-arg USER_PWD=password \
 	--build-arg SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" \
 	--progress plain  -t s6-ssh:0.1.0 -f s6.dockerfile .
+
+% docker build -t openrc-ssh:0.1.0 -f openrc.dockerfile .
 ```
 
 ## run image interactively
@@ -15,6 +17,7 @@
   s6-ssh:0.1.0 /bin/ash
 
 % docker run -ti --rm -h s6-ssh --name s6-ssh s6-ssh:0.1.0 /bin/ash
+% docker run -ti --rm -h openrc-ssh --name openrc-ssh openrc-ssh:0.1.0 /bin/ash
 ```
 
 ## run image in background
