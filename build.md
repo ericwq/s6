@@ -18,6 +18,12 @@
 
 % docker run -ti --rm -h s6-ssh --name s6-ssh s6-ssh:0.1.0 /bin/ash
 % docker run -ti --rm -h openrc-ssh --name openrc-ssh openrc-ssh:0.1.0 /bin/ash
+
+% docker run \
+  --tty \
+  --privileged \
+  --volume /sys/fs/cgroup:/sys/fs/cgroup:ro \
+  robertdebock/alpine
 ```
 
 ## run image in background
