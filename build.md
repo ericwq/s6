@@ -31,7 +31,7 @@
   --mount type=bind,source=/Users/qiwang/dev,target=/home/ide/develop \
   s6-ssh:0.1.0
 
-% docker run --tty --privileged --volume /sys/fs/cgroup:/sys/fs/cgroup:ro \
+% docker run --env TZ=Asia/Shanghai --tty --privileged --volume /sys/fs/cgroup:/sys/fs/cgroup:ro \
   --mount source=proj-vol,target=/home/ide/proj \
   --mount type=bind,source=/Users/qiwang/dev,target=/home/ide/develop \
   -h openrc-ssh --name openrc-ssh -d -p 5022:22 openrc-ssh:0.1.0

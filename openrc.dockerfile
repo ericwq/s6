@@ -22,7 +22,7 @@ ARG HOME=/home/ide
 RUN addgroup develop && adduser -D -h $HOME -s /bin/ash -G develop ide
 
 # Enable init.
-RUN apk add --update --no-cache openssh-server openrc utmps fzf ripgrep htop \
+RUN apk add --update --no-cache openssh-server openrc utmps fzf ripgrep htop tzdata \
 	&& apk add --no-cache --virtual .build-dependencies uuidgen \
 	&& uuidgen -r > /etc/machine-id \
 	# Disable getty's
@@ -102,6 +102,9 @@ COPY --chown=ide:develop ./conf/profile		$HOME/.profile
 USER root
 
 EXPOSE 22
+
+# setup time zone
+# RUN echo "export TZ=Asia/Shanghai" >> /etc/profile
 
 # start open-rc
 #
