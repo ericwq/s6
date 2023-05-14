@@ -65,7 +65,7 @@ This container use `openrc` as the init system. It also support utmpd, wtmpd and
 
 ### usage
 
-Run the following command to build the openrc container.
+Run the following command to build the openrc container. Check [here](https://github.com/ericwq/nvide#build-and-run-the-sshmosh-image) if you don't understand hwo to generate `~/.ssh/id_rsa.pub` file.
 
 ```sh
 % docker build --build-arg ROOT_PWD=passowrd \
