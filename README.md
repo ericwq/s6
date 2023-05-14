@@ -169,7 +169,8 @@ s6-networking-doc-2.5.1.3-r1
 ```
 
 </p></details>
-while the origianl `s6-overlay` site suggest `tar.xz` installation. such as:
+
+While the origianl `s6-overlay` site suggest `tar.xz` installation. Such as:
 
 ```dockerfile
 # extract s6-overlay
@@ -180,7 +181,7 @@ ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLA
 RUN tar xf /tmp/s6/s6-overlay-x86_64.tar.xz -C /
 RUN rm -rf /tmp/s6
 ```
-for alpine, `s6-overlay` package is more convinient for us. The following docker command is much more simple.
+For alpine, `s6-overlay` package is more convinient for us. The following docker command is much more simple.
 
 ```dockerfile
 RUN apk add --no-cache --update openssh-server s6-overlay
@@ -202,7 +203,7 @@ ENTRYPOINT ["/init"]
 
 With the tar ball installation, the `s6-overlay` is installed under `/command` and `/package` directory. utmps give an example `s6-rc` configuration. You need to change shebangs line to respect the above installation.
 
-the origianl content of `utmpd/run` script:
+The origianl content of `utmpd/run` script:
 
 ```sh
 #!/bin/execlineb -P
@@ -214,7 +215,7 @@ fdmove 1 3
 s6-ipcserver -1 -- /run/utmps/utmpd-socket
 utmps-utmpd
 ```
-the modified content of `utmpd/run` script, keep your eye on the first shebangs line. Without the modification, your run script is not executeable.
+The modified content of `utmpd/run` script, keep your eye on the first shebangs line. Without the modification, your run script is not executeable.
 
 ```sh
 #!/command/execlineb -P
