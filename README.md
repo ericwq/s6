@@ -1,12 +1,12 @@
 # alpine container with s6-rc or openrc support
 
-This is an alpine container which suppport [s6](https://skarnet.org/software/s6/) or [openrc](https://github.com/OpenRC/openrc) as init system. The container need [utmps](https://git.skarnet.org/cgi-bin/cgit.cgi/utmps/about/) service and  [ssh](https://www.openssh.com/) service. The sshd service is used to support remote login. The utmps serviceis is used to support `last` and `who` command.
+This is an alpine container which suppport [s6](https://skarnet.org/software/s6/) or [openrc](https://github.com/OpenRC/openrc) as init system. The container need [utmps](https://git.skarnet.org/cgi-bin/cgit.cgi/utmps/about/) service and  [ssh](https://www.openssh.com/) service. The sshd service is used to support remote login. The utmps services is used to support `last` and `who` command.
 
-I came cross s6 because `utmps` need a process supervisor. `utmps` is required because default alpine doesn't support [utmpx.h API](http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/utmpx.h.html). I tried `s6` first, after several days study, it turns out to be that [s6-rc](https://skarnet.org/software/s6-rc/index.html) and [s6-overlay](https://github.com/just-containers/s6-overlay) is what I need for container. With the help from [utmps document](https://git.skarnet.org/cgi-bin/cgit.cgi/utmps/tree/examples/s6-rc), I built a `s6-rc` container for `utmps`. Eventually, s6-rc container has all the required package, except the utmps init script. That means the container cant't support `last` and `who` command, even if the container has all the necessary service.
+I came cross s6 because `utmps` need a process supervisor. `utmps` is required because default alpine doesn't support [utmpx.h API](http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/utmpx.h.html). I tried `s6` first, after several days study, it turns out to be that [s6-rc](https://skarnet.org/software/s6-rc/index.html) and [s6-overlay](https://github.com/just-containers/s6-overlay) is what I need for container. With the help from [utmps document](https://git.skarnet.org/cgi-bin/cgit.cgi/utmps/tree/examples/s6-rc), I built a `s6-rc` container for `utmps`. Eventually, s6-rc container has all the required packages, except the utmps init script. That means the container cant't support `last` and `who` command, even if the container has all the necessary services.
 
 `openrc` is the next effort. Got a clue from this [post](https://gitlab.alpinelinux.org/alpine/aports/-/issues/13659). Then a [dockerfile](https://github.com/dockage/alpine/blob/main/3.17/Dockerfile) in github.com help me to build the `openrc` container. This time the container can support `last` and `who` command.
 
-Compare s6-rc container and openrc container, `utmps-openrc` package is the key to provide init script for openrc service. Maybe I can find the solution for the s6-rc container. The following is the content of `utmps-openrc`:
+Compare s6-rc container and openrc container, `utmps-openrc` package is the key to provide init script for openrc container. Maybe you can find the solution from the `utmps-openrc` package. The following is the content of `utmps-openrc`:
 
 <details><summary>utmps-openrc package</summary><p>
 
@@ -50,6 +50,8 @@ ISC
 
 </p></details>
 
+If you check the `utmps-openrc` package, you will find the `utmp-init`, `utmp-prepare` script.
+
 I don't have enough time to research all available init system. There is some articles to compare the init systems: 
 - [A new service manager for Linux distributions](https://skarnet.com/projects/service-manager.html)
 - [Why another supervision suite ?](https://skarnet.org/software/s6/why.html)
@@ -91,15 +93,6 @@ Login in to the container and run `setup-utmp` init script for utmps. unfortunat
 ```sh
 % setup-utmp
 ```
-You can check the init system and services with the following command.
-
-```sh
-openrc-ssh:/etc/init.d# pstree -p
-init(1)-+-s6-ipcserverd(154)
-        |-s6-ipcserverd(217)
-        |-s6-ipcserverd(245)
-        `-sshd(190)---sshd(286)---ash(288)---pstree(338)
-```
 
 Finally, you need to reboot the container and login in again. Now you can run `who` and `last` command.
 
@@ -111,6 +104,16 @@ USER       TTY            HOST               LOGIN        TIME
 ide        pts/2          172.17.0.1         May 13 18:47
 root       pts/1          172.17.0.1         May 13 18:46
 reboot     system boot    5.15.49-linuxkit   May 13 18:47
+```
+
+You can check the init system and required services with the following command.
+
+```sh
+openrc-ssh:/etc/init.d# pstree -p
+init(1)-+-s6-ipcserverd(154)
+        |-s6-ipcserverd(217)
+        |-s6-ipcserverd(245)
+        `-sshd(190)---sshd(286)---ash(288)---pstree(338)
 ```
 
 ## s6-rc container
