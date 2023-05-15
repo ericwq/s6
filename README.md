@@ -94,7 +94,7 @@ Login in to the container and run `setup-utmp` init script for utmps. unfortunat
 % setup-utmp
 ```
 
-Finally, you need to reboot the container and login in again. Now you can run `who` and `last` command.
+~~Finally, you need to reboot the container and login in again.~~ Now you can run `who` and `last` command.
 
 ```sh
 openrc-ssh:/etc/init.d# who
