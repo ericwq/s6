@@ -26,7 +26,7 @@
 
 ## run image in background
 ```sh
-% docker run -d -p 22:22 -h s6-ssh --name s6-ssh \
+% docker run -d -p 6022:22 -h s6-ssh --name s6-ssh \
   --mount source=proj-vol,target=/home/ide/proj \
   --mount type=bind,source=/Users/qiwang/dev,target=/home/ide/develop \
   s6-ssh:0.1.0
@@ -47,5 +47,8 @@
 
 % ssh -p 5022 ide@localhost
 % ssh -p 5022 root@localhost
+
+% ssh -p 6022 ide@localhost
+% ssh -p 6022 root@localhost
 % docker exec -u root -it openrc-ssh ash
 ```
